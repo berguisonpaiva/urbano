@@ -39,9 +39,9 @@ class HomePage extends GetView<HomeController> {
                 ),
                 getList: () => controller.periodo.reversed.toList(),
                 itemBuilder: (context, parameters, item) =>
-                    ListTile(title: Text(item.desc!)),
+                    ListTile(title: Text(item.desc)),
                 onItemTapped: (item) {
-                  controller.dashbord(item.id!);
+                  controller.dashbord(item.id);
                 },
               ),
             )

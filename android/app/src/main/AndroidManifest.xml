@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.capivaratecnologias.urbano">
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="urbano"
         android:icon="@mipmap/ic_launcher">

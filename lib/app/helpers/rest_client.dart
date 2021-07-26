@@ -1,9 +1,11 @@
-import 'package:get/get_connect/connect.dart';
+
+
+import 'package:get/get.dart';
 
 class RestClient extends GetConnect {
-  String? baseUrl = 'http://cootrapsfortaleza.com.br/webapp';
+  
   RestClient() {
-    httpClient.baseUrl = baseUrl;
+    httpClient.baseUrl = 'http://cootrapsfortaleza.com.br';
   }
 }
 

@@ -11,83 +11,99 @@ class UserRepository {
 
   get http => null;
 
-  Future<UserModel?> login(String usuario, String password) async {
-    final response = await restClient.post(
-      '/rest/login',
-      {'usuario': usuario, 'senha': password},
-      decoder: (resp) {
-        if (resp != '') {
-          return UserModel.fromMap(resp);
+  Future<UserModel?> login(String usuario, String senha) async {
+    try {
+      final response = await restClient.post(
+        '/webapp/rest/login/',
+        {"usuario": usuario, "senha": senha},
+        decoder: (resp) {
+          if (resp != '') {
+            return UserModel.fromMap(resp);
+          }
+        },
+      );
+      if (response.hasError) {
+        String message = 'Erro ao autenticar usuário ';
+
+        if (response.statusCode == 403) {
+          message = 'Usuário e Senha Inválidos';
         }
-      },
-    );
-    if (response.hasError) {
-      String message = 'Erro ao autenticar usuário ';
-
-      if (response.statusCode == 403) {
-        message = 'Usuário e Senha Inválidos';
+        throw RestClientException(message);
       }
-      throw RestClientException(message);
+      return response.body;
+    } catch (e) {
+      print(e);
     }
-    return response.body;
   }
 
-  Future<List<PeriodoModel>> periodo(UserModel userModel) async {
+  Future<List<PeriodoModel>?> periodo(UserModel userModel) async {
     print(userModel.token);
-    final response = await restClient.get<List<PeriodoModel>>(
-        '/rest/list/periodos.json/',
-        headers: {"token": userModel.token}, decoder: (resp) {
-      if (resp is List) {
-        return resp
-            .map<PeriodoModel>((ev) => PeriodoModel.fromMap(ev))
-            .toList();
-      }
-      return <PeriodoModel>[];
-    });
-    if (response.hasError) {
-      print(response.statusCode);
-      String message = 'Erro ao buscar periodo ';
+    try {
+      final response = await restClient.get<List<PeriodoModel>>(
+          '/webapp/rest/list/periodos.json/',
+          headers: {"token": userModel.token}, decoder: (resp) {
+        if (resp is List) {
+          return resp
+              .map<PeriodoModel>((ev) => PeriodoModel.fromMap(ev))
+              .toList();
+        }
+        return <PeriodoModel>[];
+      });
+      if (response.hasError) {
+        print(response.statusCode);
+        String message = 'Erro ao buscar periodo ';
 
-      if (response.statusCode == 403) {
-        message = 'Usuario não autenticado';
+        if (response.statusCode == 403) {
+          message = 'Usuario não autenticado';
+        }
+        if (response.statusCode == 404) {
+          message = 'Não contem periodo';
+        }
+        if (response.statusCode == 400) {
+          message = 'Dados não validos';
+        }
+        throw RestClientException(message);
       }
-      if (response.statusCode == 404) {
-        message = 'Não contem periodo';
-      }
-      if (response.statusCode == 400) {
-        message = 'Dados não validos';
-      }
-      throw RestClientException(message);
+
+      return response.body ?? <PeriodoModel>[];
+    } catch (e) {
+      print(e);
     }
-
-    return response.body ?? <PeriodoModel>[];
   }
 
-  Future<List<EnceranteModel>> dashboard(
+  Future<List<EnceranteModel>?> dashboard(
       UserModel userModel, int periodo) async {
-    final response = await restClient.get<List<EnceranteModel>>(
-        '/rest/dashboardPermissao.json/RelatorioPrestacaoContasCarro.json?periodo=$periodo',
-        headers: {"token": userModel.token}, decoder: (resp) {
-     
-      return <EnceranteModel>[];
-    });
-  
-    if (response.hasError) {
-      print(response.statusCode);
-      String message = 'Erro ao buscar periodo ';
+    try {
+      final response = await restClient.get(
+          '/webapp/rest/dashboardPermissao.json/RelatorioPrestacaoContasCarro.json?periodo=$periodo',
+          headers: {"token": userModel.token}, decoder: (resp) {
+            if (resp is List) {
+          return resp
+              .map<EnceranteModel>((ev) => EnceranteModel.fromMap(ev))
+              .toList();
+        }
+        return[];
+      });
 
-      if (response.statusCode == 403) {
-        message = 'Usuario não autenticado';
+      if (response.hasError) {
+        print(response.statusCode);
+        String message = 'Erro ao buscar dashboard ';
+
+        if (response.statusCode == 403) {
+          message = 'Usuario não autenticado';
+        }
+        if (response.statusCode == 404) {
+          message = 'Não contem periodo';
+        }
+        if (response.statusCode == 400) {
+          message = 'Dados não validos';
+        }
+        throw RestClientException(message);
       }
-      if (response.statusCode == 404) {
-        message = 'Não contem periodo';
-      }
-      if (response.statusCode == 400) {
-        message = 'Dados não validos';
-      }
-      throw RestClientException(message);
+
+      
+    }  catch (e) {
+      print(e);
     }
-
-    return response.body ?? <EnceranteModel>[];
   }
 }

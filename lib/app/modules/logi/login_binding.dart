@@ -7,7 +7,7 @@ class LoginBinding implements Bindings {
   @override
   void dependencies() {
     
-    Get.put(UserRepository(Get.find()));
+    Get.put(UserRepository(Get.find(),));
     Get.put(LoginController(Get.find()));
   }
 }

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:urbano/app/models/periodo_model.dart';
 
 class UserModel {
-  String token;
+   String token;
   String permissao;
   String usuario;
   String grupo;
@@ -29,11 +29,11 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      token: map['token'],
-      permissao: map['permissao'],
-      usuario: map['usuario'],
-      grupo: map['grupo'],
-      periodo: PeriodoModel.fromMap(map['periodo']),
+      token: map['token']??'',
+      permissao: map['permissao']??'',
+      usuario: map['usuario']??'',
+      grupo: map['grupo']??'',
+      periodo: PeriodoModel.fromMap(map['periodo']??''),
     );
   }
 
