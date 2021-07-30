@@ -31,8 +31,9 @@ class LoginController extends GetxController with LoaderMixin {
   void showHidePassword() => _obscureText.toggle();
 
   Future<void> login(String email, String password) async {
+     loading(true);
     try {
-      loading(true);
+     
 
       final user = await _repository.login(email, password);
       final sp = await SharedPreferences.getInstance();

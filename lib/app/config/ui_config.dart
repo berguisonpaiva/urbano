@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urbano/app/modules/extrato/extrato_binding.dart';
+import 'package:urbano/app/modules/extrato/extrato_page.dart';
 import 'package:urbano/app/modules/home/home_binding.dart';
 import 'package:urbano/app/modules/home/home_page.dart';
 import 'package:urbano/app/modules/logi/login_binding.dart';
@@ -33,6 +35,11 @@ class UiConfig {
       name: LoginPage.ROUTE_PAGE,
       page: () => LoginPage(),
       binding: LoginBinding(),
+    ),
+    GetPage(
+      name: ExtratoPage.ROUTE_PAGE,
+      page: () => ExtratoPage(),
+      binding: ExtratoBinding(),
     ),
   ];
 }

@@ -1,5 +1,6 @@
 import 'package:urbano/app/helpers/rest_client.dart';
 import 'package:urbano/app/models/encerante_model.dart';
+import 'package:urbano/app/models/extrato_model.dart';
 
 import 'package:urbano/app/models/periodo_model.dart';
 import 'package:urbano/app/models/user_model.dart';
@@ -41,7 +42,8 @@ class UserRepository {
     try {
       final response = await restClient.get<List<PeriodoModel>>(
           '/webapp/rest/list/periodos.json/',
-          headers: {"token": userModel.token}, decoder: (resp) {
+          headers: {"token": '{"token" : "${userModel.token}"}'},
+          decoder: (resp) {
         if (resp is List) {
           return resp
               .map<PeriodoModel>((ev) => PeriodoModel.fromMap(ev))
@@ -73,16 +75,19 @@ class UserRepository {
 
   Future<List<EnceranteModel>?> dashboard(
       UserModel userModel, int periodo) async {
+    print(periodo);
     try {
-      final response = await restClient.get(
+      final response = await restClient.get<List<EnceranteModel>>(
           '/webapp/rest/dashboardPermissao.json/RelatorioPrestacaoContasCarro.json?periodo=$periodo',
-          headers: {"token": userModel.token}, decoder: (resp) {
-            if (resp is List) {
+          headers: {
+            "token": '{"token" : "${userModel.token}"}'
+          }, decoder: (resp) {
+        if (resp is List) {
           return resp
               .map<EnceranteModel>((ev) => EnceranteModel.fromMap(ev))
               .toList();
         }
-        return[];
+        return <EnceranteModel>[];
       });
 
       if (response.hasError) {
@@ -100,10 +105,45 @@ class UserRepository {
         }
         throw RestClientException(message);
       }
-
-      
-    }  catch (e) {
+      return response.body ?? <EnceranteModel>[];
+    } catch (e) {
       print(e);
     }
   }
+
+  Future<ExtratoModel?> extrato(UserModel userModel, int periodo) async {
+
+    try {
+      final response = await restClient.get(
+          '/webapp/rest/lancamento.json/desmonstrativoResultadosIndividual.json?escopo=INDIVIDUAL&idPeriodo=$periodo',
+          headers: {
+            "token": '{"token" : "${userModel.token}"}'
+          }, decoder: (resp) {
+      
+          return ExtratoModel.fromMap(resp);
+        
+      
+      });
+
+      if (response.hasError) {
+        print(response.statusCode);
+        String message = 'Erro ao buscar dashboard ';
+
+        if (response.statusCode == 403) {
+          message = 'Usuario não autenticado';
+        }
+        if (response.statusCode == 404) {
+          message = 'Não contem periodo';
+        }
+        if (response.statusCode == 400) {
+          message = 'Dados não validos';
+        }
+        throw RestClientException(message);
+      }
+      return response.body;
+    } catch (e) {
+      print(e);
+    }
+  }
+ 
 }

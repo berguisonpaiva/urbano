@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:urbano/app/modules/extrato/extrato_page.dart';
 import 'package:urbano/app/modules/home/home_page.dart';
-import 'package:urbano/app/modules/splash/splash_page.dart';
+
 
 class AppBottomNavigation extends StatelessWidget {
+  final int _curentIdex;
+  const AppBottomNavigation(this._curentIdex);
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
- 
+        currentIndex: _curentIdex,
         items: [
           BottomNavigationBarItem(
               label: 'Dashboard', icon: Icon(Icons.dashboard)),
@@ -24,6 +27,7 @@ class AppBottomNavigation extends StatelessWidget {
               Get.offAllNamed(HomePage.ROUTE_PAGE);
               break;
             case 1:
+             Get.offAllNamed(ExtratoPage.ROUTE_PAGE);
               break;
             case 2:
               
