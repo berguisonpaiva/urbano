@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -177,9 +178,12 @@ class ExtratoController extends GetxController with LoaderMixin, StateMixin {
     }
   }
 
+//gerar pdf
   Future<void> shared() async {
     final pdf = pw.Document();
-
+  final imagePng = (await rootBundle.load('assets/images/cabeca.png'))
+        .buffer
+        .asUint8List();
     final dataAtual = DateFormat('dd/MM/yyyy').format(DateTime.now());
     final horaAtual = DateFormat.Hms().format(DateTime.now());
     pdf.addPage(
@@ -189,6 +193,8 @@ class ExtratoController extends GetxController with LoaderMixin, StateMixin {
         margin: pw.EdgeInsets.all(20),
         header: (pw.Context context) => pw.Container(
             child: pw.Column(children: [
+              pw.Image(pw.MemoryImage(imagePng)),
+          pw.SizedBox(height: 15),
           pw.Row(children: [
             pw.Text(
               'Extrato de Remisão ',

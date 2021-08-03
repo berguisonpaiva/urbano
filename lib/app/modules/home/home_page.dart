@@ -16,29 +16,25 @@ class HomePage extends GetView<HomeController> {
       NumberFormat.currency(name: '', locale: 'pt_BR', decimalDigits: 2);
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(
-          title: Text('Dashboard'),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (context) => <PopupMenuEntry>[
-                const PopupMenuItem(
-                  value: 1,
-                  child: Text('Sair'),
-                ),
-              ],
-              onSelected: (value) => controller.sair(),
-              icon: Icon(Icons.more_vert),
-            )
-          ],
-        ),
-        bottomNavigationBar: AppBottomNavigation(NAVIGATION_BAR_INDEX),
-        body: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-           Obx(
-      () =>   Container(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Dashboard'),
+        actions: [
+          IconButton(
+              onPressed: () => controller.shared(),
+              icon: Icon(
+                Icons.picture_as_pdf_rounded,
+                size: 25,
+              ))
+        ],
+      ),
+      bottomNavigationBar: AppBottomNavigation(NAVIGATION_BAR_INDEX),
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Obx(
+              () => Container(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ListCombo<PeriodoModel>(
@@ -52,36 +48,40 @@ class HomePage extends GetView<HomeController> {
                     onItemTapped: (item) {
                       controller.selectIdPeriodo(item.id);
                       controller.selectTituloPeriodo(item.desc);
+                      controller.periodoFim(item.fim);
+                      controller.periodoInicio(item.inicio);
                       controller.dashbord();
                     },
                   ),
                 ),
-              ),),
-            controller.obx((state) => Expanded(flex: 3, child: _encerante(state)))  ,
-              controller.obx((state) => Expanded( child:  _resumo(state)))  ,
-              
-            ],
-          ),
+              ),
+            ),
+            controller
+                .obx((state) => Expanded(flex: 3, child: _encerante(state))),
+          ],
         ),
-      
+      ),
     );
   }
 
   Visibility _encerante(List<EnceranteModel> state) {
     return Visibility(
       visible: state.length > 0,
-      replacement: Container(child: Center(
-        
-        child: Column(
+      replacement: Container(
+        child: Center(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-           Image.asset(
-                        'assets/images/sem-dados.png',
-                      
-                      ),
-          Text('Periodo sem dados',style: TextStyle(fontSize: 20),),
-        ],
-      )),),
+          children: [
+            Image.asset(
+              'assets/images/sem-dados.png',
+            ),
+            Text(
+              'Periodo sem dados',
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        )),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: PageView.builder(
@@ -384,6 +384,101 @@ class HomePage extends GetView<HomeController> {
                             SizedBox(
                               height: 15,
                             ),
+                            Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: Container(
+                                color: Colors.amber[300],
+                                width: 280,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 5, bottom: 0),
+                                      child: Text('RESUMO DO PERIODO',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16)),
+                                    ),
+                                    Divider(
+                                      color: Colors.white,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 5),
+                                      child: Container(
+                                        width: 200,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('VTE',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text(
+                                                numberFormat.format(
+                                                    controller.valorVTE.value),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 5),
+                                      child: Container(
+                                        width: 200,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'ESPECIE',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                                numberFormat.format(controller
+                                                    .valorEspecie.value),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, top: 5),
+                                      child: Container(
+                                        width: 200,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('TOTAL',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text(
+                                                numberFormat.format(controller
+                                                    .valorTotal.value),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -393,81 +488,6 @@ class HomePage extends GetView<HomeController> {
               ),
             );
           },
-        ),
-      ),
-    );
-  }
-
-  Visibility _resumo(state) {
-    return Visibility(
-      visible: state.length > 0,
-      child: Padding(
-        padding: const EdgeInsets.all(0.0),
-        child: Container(
-         
-          width: 260,
-          child: Card(
-             color: Colors.amber[300],
-            elevation: 5,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top:5,bottom: 0),
-                  child: Text('RESUMO DO PERIODO',
-                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
-                ),
-                
-                Divider(color: Colors.white,),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 5),
-                  child: Container(
-                    width: 200,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('VTE',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(numberFormat.format(controller.valorVTE.value),
-                            style: TextStyle(fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 5),
-                  child: Container(
-                    width: 200,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'ESPECIE',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(numberFormat.format(controller.valorEspecie.value),
-                            style: TextStyle(fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, top: 5),
-                  child: Container(
-                    width: 200,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('TOTAL',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(numberFormat.format(controller.valorTotal.value),
-                            style: TextStyle(fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );

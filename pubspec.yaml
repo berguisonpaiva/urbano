@@ -30,6 +30,7 @@ dependencies:
   dio: ^4.0.0
   floating_navbar: ^2.0.1
   flutter_icons: ^1.1.0
+  fluttericon: ^2.0.0
   fluttertoast: ^8.0.7
   get: ^4.1.4
   grouped_buttons: ^1.0.4

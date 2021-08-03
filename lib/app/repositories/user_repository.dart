@@ -29,6 +29,10 @@ class UserRepository {
         if (response.statusCode == 403) {
           message = 'Usuário e Senha Inválidos';
         }
+         
+         if (response.statusCode == 503) {
+          message = 'Erro no servidor';
+        }
         throw RestClientException(message);
       }
       return response.body;
@@ -103,6 +107,10 @@ class UserRepository {
         if (response.statusCode == 400) {
           message = 'Dados não validos';
         }
+         
+         if (response.statusCode == 503) {
+          message = 'Erro no servidor';
+        }
         throw RestClientException(message);
       }
       return response.body ?? <EnceranteModel>[];
@@ -137,6 +145,9 @@ class UserRepository {
         }
         if (response.statusCode == 400) {
           message = 'Dados não validos';
+        }
+         if (response.statusCode == 503) {
+          message = 'Erro no servidor';
         }
         throw RestClientException(message);
       }

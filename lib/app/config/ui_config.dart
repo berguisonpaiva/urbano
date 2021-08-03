@@ -6,6 +6,8 @@ import 'package:urbano/app/modules/home/home_binding.dart';
 import 'package:urbano/app/modules/home/home_page.dart';
 import 'package:urbano/app/modules/logi/login_binding.dart';
 import 'package:urbano/app/modules/logi/login_page.dart';
+import 'package:urbano/app/modules/menu/menu_bindings.dart';
+import 'package:urbano/app/modules/menu/menu_page.dart';
 import 'package:urbano/app/modules/splash/splash_binding.dart';
 import 'package:urbano/app/modules/splash/splash_page.dart';
 
@@ -40,6 +42,11 @@ class UiConfig {
       name: ExtratoPage.ROUTE_PAGE,
       page: () => ExtratoPage(),
       binding: ExtratoBinding(),
+    ),
+     GetPage(
+      name: MenuPage.ROUTE_PAGE,
+      page: () => MenuPage(),
+      binding: MenuBindings(),
     ),
   ];
 }

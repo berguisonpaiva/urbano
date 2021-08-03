@@ -17,16 +17,7 @@ class ExtratoPage extends GetView<ExtratoController> {
       appBar: AppBar(
         title: Text('Extrato'),
         actions: [
-          PopupMenuButton(
-            itemBuilder: (context) => <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: 1,
-                child: Text('Pdf'),
-              ),
-            ],
-            onSelected: (value) => controller.shared(),
-            icon: Icon(Icons.more_vert),
-          )
+          IconButton(onPressed:()=> controller.shared(), icon: Icon(Icons.picture_as_pdf_rounded,size: 25,))
         ],
       ),
       bottomNavigationBar: AppBottomNavigation(NAVIGATION_BAR_INDEX),

@@ -1,0 +1,3 @@
+-keep class androidx.core.app.CoreComponentFactory { <init>(); }
+-keep class br.com.capivaratecnologias.urbano.MainActivity { <init>(); }
+-keep class com.zt.shareextend.ShareExtendProvider { <init>(); }
